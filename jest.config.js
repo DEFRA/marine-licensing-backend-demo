@@ -13,5 +13,6 @@ module.exports = {
     '<rootDir>/.server',
     '<rootDir>/src/__fixtures__'
   ],
-  coverageDirectory: '<rootDir>/coverage'
+  coverageDirectory: '<rootDir>/coverage',
+  setupFilesAfterEnv: ['<rootDir>/src/jest.setup.js']
 }
