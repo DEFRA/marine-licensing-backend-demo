@@ -1,11 +1,11 @@
 import { health } from '~/src/api/health'
-import { example } from '~/src/api/example'
+import { sites } from '~/src/api/sites'
 
 const router = {
   plugin: {
     name: 'Router',
     register: async (server) => {
-      await server.register([health, example])
+      await server.register([health, sites])
     }
   }
 }
