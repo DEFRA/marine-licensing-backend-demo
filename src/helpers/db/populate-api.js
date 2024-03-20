@@ -1,7 +1,6 @@
 import { createLogger } from '~/src/helpers/logging/logger'
 import { fetchApplicants } from '~/src/helpers/db/fetch-applicants'
 import { fetchApplications } from '~/src/helpers/db/fetch-applications'
-import { fetchCases } from '~/src/helpers/db/fetch-cases'
 import { fetchSites } from '~/src/helpers/db/fetch-sites'
 
 const logger = createLogger()
@@ -24,10 +23,6 @@ async function populateApi(mongo, db) {
     const applications = db.collection('applications')
     const newApplications = await fetchApplications()
     await insertData(applications, newApplications)
-
-    const cases = db.collection('cases')
-    const newCases = await fetchCases()
-    await insertData(cases, newCases)
 
     const sites = db.collection('sites')
     const newSites = await fetchSites()
