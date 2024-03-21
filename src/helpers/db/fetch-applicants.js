@@ -5,7 +5,7 @@ async function fetchApplicants() {
       forename: 'John',
       surname: 'Haddock',
       address: '29 Acacia Road, Nuttytown',
-      email: 'John@seahorseypettingzoo.com'
+      email: 'john@seahorseypettingzoo.com'
     }
   ])
 }
