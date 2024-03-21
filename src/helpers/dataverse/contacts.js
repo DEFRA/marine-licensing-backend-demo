@@ -1,4 +1,4 @@
-import { Wreck } from '@hapi/wreck'
+import Wreck from '@hapi/wreck'
 import { config } from '~/src/config'
 import { getHeaders } from '~/src/helpers/dataverse'
 

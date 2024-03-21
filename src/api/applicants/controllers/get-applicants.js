@@ -1,5 +1,5 @@
 import {
-  getContacts,
+  getContactByEmail,
   getServerToServerAccessToken
 } from '~/src/helpers/dataverse'
 
@@ -11,15 +11,13 @@ export const getApplicantsController = {
     const applicants = await cursor.toArray()
 
     const token = await getServerToServerAccessToken()
-    const contacts = await getContacts(token)
+    const augmentedApplicants = await Promise.all(
+      applicants.map(async (applicant) => {
+        const contact = await getContactByEmail(token, applicant.email)
 
-    const augmentedApplicants = applicants.map((applicant) => {
-      const matchingContact = contacts.find(
-        (contact) => contact.emailaddress1 === applicant.email
-      )
-
-      return { ...applicant, ...matchingContact }
-    })
+        return { ...applicant, ...contact }
+      })
+    )
 
     return h
       .response({ message: 'success', applicants: augmentedApplicants })
