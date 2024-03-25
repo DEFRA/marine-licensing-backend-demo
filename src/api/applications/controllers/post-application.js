@@ -1,21 +1,10 @@
-import joi from 'joi'
 import { getServerToServerAccessToken } from '~/src/helpers/dataverse'
 import { createIncident } from '~/src/helpers/dataverse/incidents'
 import { getContactByEmail } from '~/src/helpers/dataverse/contacts'
 
 export const postApplicationController = {
   options: {
-    validate: {
-      query: false,
-      payload: joi.object({
-        title: joi.string().required(),
-        background: joi.string().required(),
-        email: joi
-          .string()
-          .required()
-          .email({ tlds: { allow: false } })
-      })
-    }
+    validate: {}
   },
   handler: async (request, h) => {
     const {
@@ -23,19 +12,28 @@ export const postApplicationController = {
       payload: { title, background, email }
     } = request
 
-    const token = await getServerToServerAccessToken()
+    const session = db.client.startSession()
+    try {
+      await session.withTransaction(async () => {
+        const token = await getServerToServerAccessToken()
 
-    const { contactid: contactId } = await getContactByEmail(token, email)
+        const contactResponse = await getContactByEmail(token, email)
+        const { contactid: applicantId } = contactResponse
 
-    const incident = await createIncident(token, {
-      title,
-      contactId
-    })
+        await createIncident(token, {
+          title,
+          background,
+          contactId: applicantId
+        })
 
-    await db
-      .collection('applications')
-      .insertOne({ applicantId: contactId, title, background })
+        await db
+          .collection('applications')
+          .insertOne({ applicantId, title, background })
+      })
 
-    return h.response({ message: 'success', incident }).code(200)
+      return h.response({ message: 'success' }).code(200)
+    } finally {
+      session.endSession()
+    }
   }
 }

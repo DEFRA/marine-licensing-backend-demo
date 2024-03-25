@@ -21,22 +21,19 @@ export const createIncident = async (
   token,
   { contactId, title, background }
 ) => {
-  const { payload } = await Wreck.post(
-    `${config.get('dataverseApiUrl')}/incidents`,
-    {
-      headers: { ...postHeaders(token) },
-      payload: JSON.stringify({
-        title,
-        description: background,
-        statuscode: -1,
-        prioritycode: 2,
-        caseorigincode: null,
-        ticketnumber: null,
-        'customerid_contact@odata.bind': `/contacts(${contactId})`,
-        createdon: null
-      })
+  const uri = config.get('dataverseApiUrl')
+  const response = await Wreck.post(`${uri}/incidents`, {
+    headers: { ...postHeaders(token) },
+    payload: {
+      title,
+      statuscode: -1,
+      prioritycode: 2,
+      caseorigincode: null,
+      ticketnumber: null,
+      'customerid_contact@odata.bind': `/contacts(${contactId})`,
+      createdon: null
     }
-  )
+  })
 
-  return payload
+  return response
 }
