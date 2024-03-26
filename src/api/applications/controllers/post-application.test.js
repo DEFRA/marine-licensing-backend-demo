@@ -10,6 +10,10 @@ jest.mock('~/src/helpers/dataverse/incidents', () => ({
   createIncident: jest.fn()
 }))
 
+jest.mock('~/src/helpers/dataverse', () => ({
+  getServerToServerAccessToken: jest.fn().mockResolvedValue('<token>')
+}))
+
 describe('POST /applications', () => {
   beforeEach(() => {
     upsertContactByEmail.mockReturnValue({ contactid: '123' })
@@ -42,7 +46,7 @@ describe('POST /applications', () => {
     )
 
     expect(upsertContactByEmail).toHaveBeenCalledWith(
-      expect.any(String),
+      '<token>',
       expect.objectContaining({
         email: payload.email,
         firstName: payload.firstName,
@@ -51,7 +55,7 @@ describe('POST /applications', () => {
     )
 
     expect(createIncident).toHaveBeenCalledWith(
-      expect.any(String),
+      '<token>',
       expect.objectContaining({
         title: payload.title,
         background: payload.background,
