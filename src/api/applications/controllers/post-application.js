@@ -2,6 +2,7 @@ import { getServerToServerAccessToken } from '~/src/helpers/dataverse'
 import { createIncident } from '~/src/helpers/dataverse/incidents'
 import { upsertContactByEmail } from '~/src/helpers/dataverse/contacts'
 import joi from 'joi'
+import { generateApplicationId } from '~/src/helpers/counters/application-id'
 
 export const postApplicationController = {
   options: {
@@ -39,10 +40,12 @@ export const postApplicationController = {
         })
         const { contactid: applicantId } = contactResponse
 
+        const applicationId = await generateApplicationId(db)
         await createIncident(token, {
           title,
           background,
-          contactId: applicantId
+          contactId: applicantId,
+          applicationId
         })
 
         await db
