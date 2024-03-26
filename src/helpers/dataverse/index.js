@@ -21,6 +21,14 @@ export const postHeaders = (token) => ({
   Prefer: 'odata.include-annotations=' * ''
 })
 
+export const patchHeaders = (token) => ({
+  ...getOAuthHeaders(token),
+  'If-None-Match': 'null',
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+  Prefer: 'return=representation'
+})
+
 export const getServerToServerAccessToken = async () => {
   const oauthClient = new SimpleOAuth2.ClientCredentials({
     client: {

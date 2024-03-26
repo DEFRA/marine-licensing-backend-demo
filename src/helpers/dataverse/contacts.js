@@ -1,36 +1,21 @@
 import Wreck from '@hapi/wreck'
 import { config } from '~/src/config'
-import { getHeaders } from '~/src/helpers/dataverse'
+import { getHeaders, patchHeaders } from '~/src/helpers/dataverse'
 
-export const getContacts = async (token) => {
-  const { payload } = await Wreck.get(
-    `${config.get('dataverseApiUrl')}/contacts`,
+export const upsertContactByEmail = async (
+  token,
+  { email, firstName, lastName }
+) => {
+  const { payload } = await Wreck.patch(
+    `${config.get('dataverseApiUrl')}/contacts(emailaddress1='${email}')`,
     {
-      headers: { ...getHeaders(token) }
+      headers: { ...patchHeaders(token) },
+      payload: {
+        firstname: firstName,
+        lastname: lastName
+      }
     }
   )
 
-  return JSON.parse(payload).value
-}
-
-export const getContactByName = async (token, name) => {
-  const { payload } = await Wreck.get(
-    `${config.get('dataverseApiUrl')}/contacts?$filter=contains(fullname, '${name}')`,
-    {
-      headers: { ...getHeaders(token) }
-    }
-  )
-
-  return JSON.parse(payload).value[0]
-}
-
-export const getContactByEmail = async (token, email) => {
-  const { payload } = await Wreck.get(
-    `${config.get('dataverseApiUrl')}/contacts?$filter=contains(emailaddress1, '${email}')`,
-    {
-      headers: { ...getHeaders(token) }
-    }
-  )
-
-  return JSON.parse(payload).value[0]
+  return JSON.parse(payload)
 }
