@@ -1,5 +1,6 @@
 .public
 .server
+.docker
 package-lock.json
 node_modules
 coverage
