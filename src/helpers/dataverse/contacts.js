@@ -1,6 +1,6 @@
 import Wreck from '@hapi/wreck'
 import { config } from '~/src/config'
-import { getHeaders, patchHeaders } from '~/src/helpers/dataverse'
+import { patchHeaders } from '~/src/helpers/dataverse'
 
 export const upsertContactByEmail = async (
   token,

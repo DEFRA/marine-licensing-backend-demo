@@ -32,14 +32,11 @@ export const postApplicationController = {
       await session.withTransaction(async () => {
         const token = await getServerToServerAccessToken()
 
-        const contactResponseP = upsertContactByEmail(token, {
+        const contactResponse = await upsertContactByEmail(token, {
           email,
           firstName,
           lastName
         })
-
-        contactResponseP.catch(e => console.log('error', e, e.data.payload.toString()))
-        const contactResponse = await contactResponseP
         const { contactid: applicantId } = contactResponse
 
         await createIncident(token, {
