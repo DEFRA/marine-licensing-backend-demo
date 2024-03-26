@@ -26,6 +26,7 @@ export const createIncident = async (
     headers: { ...postHeaders(token) },
     payload: {
       title,
+      ml_projectbackground: background,
       statuscode: -1,
       prioritycode: 2,
       caseorigincode: null,
