@@ -2,7 +2,7 @@ async function fetchCounters() {
   return Promise.resolve([
     {
       name: 'applicationId',
-      counter: 1
+      counter: 2
     }
   ])
 }
