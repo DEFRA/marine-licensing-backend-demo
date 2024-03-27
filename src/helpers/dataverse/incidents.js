@@ -19,7 +19,7 @@ export const getIncidentsByContact = async (token, contactId) => {
 
 export const createIncident = async (
   token,
-  { contactId, title, background }
+  { contactId, title, background, applicationId }
 ) => {
   const uri = config.get('dataverseApiUrl')
   const response = await Wreck.post(`${uri}/incidents`, {
@@ -30,7 +30,7 @@ export const createIncident = async (
       statuscode: -1,
       prioritycode: 2,
       caseorigincode: null,
-      ticketnumber: null,
+      ticketnumber: applicationId,
       'customerid_contact@odata.bind': `/contacts(${contactId})`,
       createdon: null
     }
