@@ -1,7 +1,7 @@
 async function fetchApplications() {
   return Promise.resolve([
     {
-      applicationId: 'ef6b3794-e44a-424c-a098-1c1abea19cf3',
+      applicationId: 'MLA/2024/00001',
       applicantId: '7a78cd07-fe40-4659-bbf2-619eee442b1d',
       siteId: 'df5d4b3a-83cb-4134-aa24-14e6efc197c1',
       title: 'The Seaside Serenity project',
