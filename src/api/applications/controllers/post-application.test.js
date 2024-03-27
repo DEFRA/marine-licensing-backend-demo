@@ -24,12 +24,14 @@ describe('POST /applications', () => {
 
     const payload = {
       title: 'App Title',
-      background: 'App Background',
-      firstName: 'John',
-      lastName: 'Smith',
-      email: 'john.smith@domain.com',
-      site: [],
-      address: '1 Somewhere Place'
+      applicant: {
+        background: 'App Background',
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'john.smith@domain.com',
+        address: '1 Somewhere Place'
+      },
+      site: { coordinates: '' }
     }
 
     await postApplicationController.handler(
@@ -48,9 +50,9 @@ describe('POST /applications', () => {
     expect(upsertContactByEmail).toHaveBeenCalledWith(
       '<token>',
       expect.objectContaining({
-        email: payload.email,
-        firstName: payload.firstName,
-        lastName: payload.lastName
+        email: payload.applicant.email,
+        firstName: payload.applicant.firstName,
+        lastName: payload.applicant.lastName
       })
     )
 
@@ -60,9 +62,15 @@ describe('POST /applications', () => {
         title: payload.title,
         background: payload.background,
         contactId: '123',
-        applicationId: 'MLA/2024/00001'
+        applicationId: 'MLA/2024/00002'
       })
     )
+
+    expect(
+      await mockMongo.collection('applications').findOne({
+        applicationId: 'MLA/2024/00002'
+      })
+    ).toMatchObject(payload)
   })
 })
 
@@ -73,25 +81,33 @@ describe('POST /applications validation', () => {
     const result = payloadValidator.validate({
       title: '',
       background: '',
-      // firstName: '', // missing field
-      lastName: '',
-      email: '',
-      site: '',
-      address: ''
+      applicant: {
+        // firstName: '', // missing field
+        lastName: '',
+        email: '',
+        address: ''
+      },
+      site: {
+        coordinates: ''
+      }
     })
 
-    expect(result.error.message).toContain('"firstName" is required')
+    expect(result.error.message).toContain('"applicant.firstName" is required')
   })
 
   it('should succeed if fields are empty strings', () => {
     const result = payloadValidator.validate({
       title: '',
       background: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      site: '',
-      address: ''
+      applicant: {
+        firstName: '', // missing field
+        lastName: '',
+        email: '',
+        address: ''
+      },
+      site: {
+        coordinates: ''
+      }
     })
 
     expect(result.error).toBeUndefined()
