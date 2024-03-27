@@ -65,3 +65,35 @@ describe('POST /applications', () => {
     )
   })
 })
+
+describe('POST /applications validation', () => {
+  const payloadValidator = postApplicationController.options.validate.payload
+
+  it('should fail if fields are missing', () => {
+    const result = payloadValidator.validate({
+      title: '',
+      background: '',
+      // firstName: '', // missing field
+      lastName: '',
+      email: '',
+      site: '',
+      address: ''
+    })
+
+    expect(result.error.message).toContain('"firstName" is required')
+  })
+
+  it('should succeed if fields are empty strings', () => {
+    const result = payloadValidator.validate({
+      title: '',
+      background: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      site: '',
+      address: ''
+    })
+
+    expect(result.error).toBeUndefined()
+  })
+})

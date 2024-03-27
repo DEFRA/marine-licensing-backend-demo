@@ -9,16 +9,17 @@ export const postApplicationController = {
     validate: {
       query: false,
       payload: joi.object({
-        title: joi.string().required(),
-        background: joi.string().required(),
-        firstName: joi.string().required(),
-        lastName: joi.string().required(),
+        title: joi.string().required().allow(''),
+        background: joi.string().required().allow(''),
+        firstName: joi.string().required().allow(''),
+        lastName: joi.string().required().allow(''),
         email: joi
           .string()
           .required()
-          .email({ tlds: { allow: false } }),
-        site: joi.string(),
-        address: joi.string()
+          .email({ tlds: { allow: false } })
+          .allow(''),
+        site: joi.string().allow(''),
+        address: joi.string().allow('')
       })
     }
   },
