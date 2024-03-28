@@ -1,6 +1,6 @@
 import { dropDatabaseController } from '~/src/api/admin/controllers/drop-database'
 
-export const applications = {
+export const admin = {
   plugin: {
     name: 'admin',
     register: async (server) => {
