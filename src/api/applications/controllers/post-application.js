@@ -1,32 +1,14 @@
 import { getServerToServerAccessToken } from '~/src/helpers/dataverse'
 import { createIncident } from '~/src/helpers/dataverse/incidents'
 import { upsertContactByEmail } from '~/src/helpers/dataverse/contacts'
-import joi from 'joi'
 import { generateApplicationId } from '~/src/helpers/counters/application-id'
-
-const contract = joi.object({
-  title: joi.string().required().allow(''),
-  background: joi.string().required().allow(''),
-  applicant: joi.object({
-    firstName: joi.string().required().allow(''),
-    lastName: joi.string().required().allow(''),
-    email: joi
-      .string()
-      .required()
-      .email({ tlds: { allow: false } })
-      .allow(''),
-    address: joi.string().allow('')
-  }),
-  site: joi.object({
-    coordinates: joi.string().allow('')
-  })
-})
+import { application } from '~/src/models/application'
 
 export const postApplicationController = {
   options: {
     validate: {
       query: false,
-      payload: contract
+      payload: application
     }
   },
   handler: async (request, h) => {
