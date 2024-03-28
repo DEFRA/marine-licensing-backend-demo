@@ -1,6 +1,7 @@
 import { createLogger } from '~/src/helpers/logging/logger'
 import { fetchApplications } from '~/src/helpers/db/fetch-applications'
 import { fetchCounters } from '~/src/helpers/db/fetch-counters'
+import { fetchAmendmentRequests } from '~/src/helpers/db/fetch-amendment-requests'
 
 const logger = createLogger()
 
@@ -18,6 +19,12 @@ async function populateApi(mongo, db) {
       const applications = db.collection('applications')
       const newApplications = await fetchApplications()
       await insertData(applications, newApplications)
+    }
+
+    if ((await db.collection('amendment-requests').count()) === 0) {
+      const amendmentRequests = db.collection('amendment-requests')
+      const newAmendmentRequests = await fetchAmendmentRequests()
+      await insertData(amendmentRequests, newAmendmentRequests)
     }
 
     if ((await db.collection('counters').count()) === 0) {
