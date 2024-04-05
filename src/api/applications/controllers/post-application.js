@@ -21,7 +21,7 @@ export const postApplicationController = {
     } = payload
     const session = db.client.startSession()
     try {
-      await session.withTransaction(async () => {
+      return await session.withTransaction(async () => {
         const token = await getServerToServerAccessToken()
 
         const contactResponse = await upsertContactByEmail(token, {
@@ -39,12 +39,14 @@ export const postApplicationController = {
           applicationId
         })
 
-        await db
-          .collection('applications')
-          .insertOne({ applicationId, ...payload })
-      })
+        const applicationData = { applicationId, ...payload }
 
-      return h.response({ message: 'success' }).code(200)
+        await db.collection('applications').insertOne({ ...applicationData })
+
+        return h
+          .response({ message: 'success', value: applicationData })
+          .code(200)
+      })
     } finally {
       session.endSession()
     }
