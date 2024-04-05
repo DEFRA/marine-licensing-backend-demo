@@ -13,12 +13,21 @@ export const putAmendmentRequestController = {
       payload
     } = request
 
+    const applicationId = `${prefix}/${year}/${sequenceNumber}`
+
     await db
       .collection('amendment-requests')
       .findOneAndReplace(
-        { applicationId: { $eq: `${prefix}/${year}/${sequenceNumber}` } },
+        { applicationId: { $eq: applicationId } },
         { ...payload },
         { upsert: true }
+      )
+
+    await db
+      .collection('applications')
+      .updateOne(
+        { applicationId },
+        { $set: { applicationStatus: 'amendment-requested' } }
       )
 
     return h.response({ message: 'success' }).code(200)

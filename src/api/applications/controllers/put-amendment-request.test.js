@@ -4,8 +4,10 @@ describe('PUT /applications/{prefix}/{year}/{sequenceNumber}/amendment-request',
   test('should create an amendment request with the correct data', async () => {
     const { mockMongo, mockHandler } = global
 
+    const applicationId = 'MLA/2024/00001'
+
     const payload = {
-      applicationId: 'MLA/2024/00001',
+      applicationId,
       site: {
         coordinates: {
           originalValue: '[0000001,0000002]',
@@ -35,5 +37,11 @@ describe('PUT /applications/{prefix}/{year}/{sequenceNumber}/amendment-request',
     expect(
       await mockMongo.collection('amendment-requests').findOne({})
     ).toMatchObject(payload)
+
+    expect(
+      await mockMongo.collection('applications').findOne({ applicationId })
+    ).toMatchObject({
+      applicationStatus: 'amendment-requested'
+    })
   })
 })
