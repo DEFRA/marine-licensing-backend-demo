@@ -8,6 +8,7 @@ export const dropDatabaseController = {
       name: 'applicationId',
       counter: 1
     })
+    await db.collection('amendment-requests').deleteMany({})
 
     return h.response({ message: 'success' }).code(200)
   }
