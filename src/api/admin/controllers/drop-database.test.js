@@ -21,6 +21,8 @@ describe('POST /admin/drop-database', () => {
 
     expect(await mockMongo.collection('applications').count()).toEqual(0)
 
+    expect(await mockMongo.collection('amendment-requests').count()).toEqual(0)
+
     expect(await mockMongo.collection('counters').findOne({})).toMatchObject({
       name: 'applicationId',
       counter: 1
