@@ -39,7 +39,11 @@ export const postApplicationController = {
           applicationId
         })
 
-        const applicationData = { applicationId, ...payload }
+        const applicationData = {
+          applicationId,
+          applicationStatus: 'submitted',
+          ...payload
+        }
 
         await db.collection('applications').insertOne({ ...applicationData })
 

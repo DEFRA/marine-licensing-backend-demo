@@ -46,7 +46,11 @@ describe('POST /applications', () => {
     expect(mockHandler.response).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'success',
-        value: { applicationId: 'MLA/2024/00002', ...payload }
+        value: {
+          applicationId: 'MLA/2024/00002',
+          applicationStatus: 'submitted',
+          ...payload
+        }
       })
     )
 
@@ -73,7 +77,11 @@ describe('POST /applications', () => {
       await mockMongo.collection('applications').findOne({
         applicationId: 'MLA/2024/00002'
       })
-    ).toMatchObject(payload)
+    ).toMatchObject({
+      applicationId: 'MLA/2024/00002',
+      applicationStatus: 'submitted',
+      ...payload
+    })
   })
 })
 
