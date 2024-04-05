@@ -44,7 +44,10 @@ describe('POST /applications', () => {
 
     expect(mockHandler.code).toHaveBeenCalledWith(200)
     expect(mockHandler.response).toHaveBeenCalledWith(
-      expect.objectContaining({ message: 'success' })
+      expect.objectContaining({
+        message: 'success',
+        value: { applicationId: 'MLA/2024/00002', ...payload }
+      })
     )
 
     expect(upsertContactByEmail).toHaveBeenCalledWith(
