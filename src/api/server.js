@@ -1,6 +1,6 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
-
+import { bootstrap } from 'global-agent'
 import { config } from '~/src/config'
 import { router } from '~/src/api/router'
 import { requestLogger } from '~/src/helpers/logging/request-logger'
@@ -12,6 +12,8 @@ import { secureContext } from '~/src/helpers/secure-context'
 const isProduction = config.get('isProduction')
 
 async function createServer() {
+  bootstrap()
+  global.GLOBAL_AGENT.HTTP_PROXY = config.get('httpProxy')
   const server = hapi.server({
     port: config.get('port'),
     routes: {

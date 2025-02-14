@@ -47,7 +47,7 @@ describe('POST /applications', () => {
       expect.objectContaining({
         message: 'success',
         value: {
-          applicationId: 'MLA/2024/00002',
+          applicationId: 'MLA/2025/00002',
           applicationStatus: 'submitted',
           ...payload
         }
@@ -69,16 +69,16 @@ describe('POST /applications', () => {
         title: payload.title,
         background: payload.background,
         contactId: '123',
-        applicationId: 'MLA/2024/00002'
+        applicationId: 'MLA/2025/00002'
       })
     )
 
     expect(
       await mockMongo.collection('applications').findOne({
-        applicationId: 'MLA/2024/00002'
+        applicationId: 'MLA/2025/00002'
       })
     ).toMatchObject({
-      applicationId: 'MLA/2024/00002',
+      applicationId: 'MLA/2025/00002',
       applicationStatus: 'submitted',
       ...payload
     })
